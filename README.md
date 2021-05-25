@@ -19,12 +19,12 @@ You can pick date / range date /  Month / Year .
 |||||||
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 |
-![Plugin example demo](images/DatePicker.png) |
-![](https://drive.google.com/file/d/1G1XDr9qDsyNoZZZMDlFT1kUKUb4-3_ct/view?usp=sharing) |
-![](https://drive.google.com/file/d/1G9_kZ8l7-oveVo5A0mRSkKXfcUeZxoU4/view?usp=sharing) |
-![](https://drive.google.com/file/d/1S5Kw5LpkAOs5iZD3u5dMio5tNJOz6WB2/view?usp=sharing) |
-![](https://drive.google.com/file/d/1Ip01GLxWaO_AFvRP814xts1XNe6Z6d8G/view?usp=sharing) |
-![](https://drive.google.com/file/d/1Y0f-rT_f34_NbP6TRmzawXJS-UXt3rfX/view?usp=sharing) |
+![](images/DatePicker.png) |
+![](images/date_picker_editable.png) |
+![](images/date_picker_ranged.png) |
+![](images/date_picker_seprate.png) |
+![](images/month_picker.png) |
+![](images/year_picker.png) |
 
   
   
