@@ -37,13 +37,12 @@ class _AltMonthPickerState extends State<AltMonthPicker>
     super.dispose();
   }
 
-  void makeDateNameWidgetList() {
-    months = List.generate(12, (index) {
+  List<Widget> makeDateNameWidgetList() {
+    return List.generate(12, (index) {
       return GestureDetector(
         onTap: () {
           if (!widget.pickerModel.isDisable(index + 1))
             widget.pickerModel.setSelectedDay(index + 1);
-          setState(() {});
         },
         child: Container(
           width: 80,
@@ -93,10 +92,6 @@ class _AltMonthPickerState extends State<AltMonthPicker>
 
   @override
   Widget build(BuildContext context) {
-    makeDateNameWidgetList();
-
-    List chunks = partition(months, 3).toList();
-
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Column(
@@ -111,10 +106,13 @@ class _AltMonthPickerState extends State<AltMonthPicker>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  '${widget.pickerModel.getMonthNameByIndex(widget.pickerModel.startSelectedInitDate)}',
-                  textAlign: TextAlign.right,
-                  style: widget.theme.headerStyle,
+                ValueListenableBuilder(
+                  valueListenable: widget.pickerModel.dayNotifier,
+                  builder: (context, value, child) => Text(
+                    '${widget.pickerModel.getMonthNameByIndex(value)}',
+                    textAlign: TextAlign.right,
+                    style: widget.theme.headerStyle,
+                  ),
                 ),
                 SizedBox(
                   height: 8,
@@ -129,24 +127,33 @@ class _AltMonthPickerState extends State<AltMonthPicker>
                 SizedBox(
                   height: 8,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: chunks.map((row) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(vertical: 3),
-                      child: AnimatedBuilder(
-                        animation: animController,
-                        builder: (context, child) => Opacity(
-                          opacity: animController.value,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: row,
+                ValueListenableBuilder(
+                  valueListenable: widget.pickerModel.dayNotifier,
+                  builder: (context, value, child) {
+                    List chunks =
+                        partition(makeDateNameWidgetList(), 3).toList();
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: chunks.map((row) {
+                        return Container(
+                          padding: EdgeInsets.symmetric(vertical: 3),
+                          child: AnimatedBuilder(
+                            animation: animController,
+                            builder: (context, child) => Opacity(
+                              opacity: animController.value,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: row,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     );
-                  }).toList(),
+                  },
                 ),
                 Padding(
                   padding:

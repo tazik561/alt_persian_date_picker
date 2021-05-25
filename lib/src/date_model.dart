@@ -1,4 +1,5 @@
 import 'package:alt_persian_date_picker/src/picker_enum.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:alt_persian_date_picker/src/convert_number.dart';
 
@@ -11,8 +12,8 @@ abstract class BasePickerModel {
 }
 
 class MonthPickerModel extends BasePickerModel {
+  ValueNotifier dayNotifier;
   int startSelectedInitDate;
-  Jalali jDate;
   String finalMonth;
   int todayMonthNum;
   List<int> disables = [];
@@ -21,23 +22,23 @@ class MonthPickerModel extends BasePickerModel {
     this.disables,
   }) {
     getJalaliDateSelected();
-    _getTodayMonthNum();
   }
 
-  // int get selectedMonth => int.parse(startSelectedInitDate);
   void setSelectedDay(int monthIndex) {
-    startSelectedInitDate = monthIndex;
+    dayNotifier.value = monthIndex;
+    finalMonth = _getMonth(monthIndex).formatter.mN;
   }
 
   @override
   void getJalaliDateSelected() {
-    jDate = _getMonth(startSelectedInitDate);
+    dayNotifier = ValueNotifier(startSelectedInitDate);
+    todayMonthNum = int.parse(Jalali.now().formatter.m);
+    finalMonth = _getMonth(startSelectedInitDate).formatter.mN;
   }
 
   @override
   String getMonthNameByIndex(int monthIndex) {
-    finalMonth = _getMonth(monthIndex).formatter.mN;
-    return finalMonth;
+    return _getMonth(monthIndex).formatter.mN;
   }
 
   Date _getMonth(int index) {
@@ -50,12 +51,8 @@ class MonthPickerModel extends BasePickerModel {
     return Jalali.now().formatter.mN;
   }
 
-  void _getTodayMonthNum() {
-    todayMonthNum = int.parse(Jalali.now().formatter.m);
-  }
-
   bool isSelectedMonth(int monthNum) {
-    return startSelectedInitDate == monthNum ? true : false;
+    return dayNotifier.value == monthNum ? true : false;
   }
 
   @override
