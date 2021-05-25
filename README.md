@@ -20,8 +20,8 @@ You can pick date / range date /  Month / Year .
 
 # Screenshots
 
-|Date picker---Range Date picker---Year picker---Month picker|
-| ---------- | ----------------- | ----------- | ----------- |
+|||||||
+| ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 |![]( images/month_picker.png) |![]( images/year_picker.png) |![]( images/date_picker.png) |![]( images/date_picker_editable.png) |![]( images/date_picker_ranged.png) |![]( images/date_picker_seprate.png) |
 
   
