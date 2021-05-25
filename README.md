@@ -19,12 +19,7 @@ You can pick date / range date /  Month / Year .
 |||||||
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
 
-|![](images/DatePicker.png) |
-|![](images/date_picker_editable.png) |
-|![](images/date_picker_ranged.png) |
-|![](images/date_picker_seprate.png) |
-|![](images/month_picker.png) |
-|![](images/year_picker.png) |
+|![](images/DatePicker.png) |![](images/date_picker_editable.png) |![](images/date_picker_ranged.png) |![](images/date_picker_seprate.png) |![](images/month_picker.png) |![](images/year_picker.png) |
 
   
   
