@@ -18,7 +18,13 @@ You can pick date / range date /  Month / Year .
 
 |||||||
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
-|![]( month_picker.png) |![]( year_picker.png) |![]( date_picker.png) |![]( date_picker_editable.png) |![]( date_picker_ranged.png) |![](date_picker_seprate.png) |
+|
+![](https://github.com/tazik561/alt_persian_date_picker/raw/main/month_picker.png) |
+![](https://github.com/tazik561/alt_persian_date_picker/blob/main/year_picker.png) |
+![](https://github.com/tazik561/alt_persian_date_picker/blob/main/date_picker.png) |
+![](https://github.com/tazik561/alt_persian_date_picker/raw/main/date_picker_editable.png) |
+![](https://github.com/tazik561/alt_persian_date_picker/blob/main/date_picker_seprate.png) |
+![](https://github.com/tazik561/alt_persian_date_picker/blob/main/date_picker_ranged.png) |
 
   
   
@@ -97,3 +103,4 @@ Here is an example how to use:
 ##Pull request and feedback are always appreciated.
 
 ###Contact me with `ali.tazik@gmail.com`.
+
