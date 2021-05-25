@@ -18,7 +18,7 @@ You can pick date / range date /  Month / Year .
 
 |||||||
 | ---------- | ---------- | ---------- | ---------- | ---------- | ---------- |
-|
+
 ![](images/DatePicker.png) |
 ![](images/date_picker_editable.png) |
 ![](images/date_picker_ranged.png) |
