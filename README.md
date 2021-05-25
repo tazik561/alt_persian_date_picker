@@ -5,10 +5,6 @@
 
   
 
-[![pub package](https://img.shields.io/pub/v/persian_datetime_picker.svg?color=%23e67e22&label=pub&logo=persian_datetime_picker)](https://pub.dartlang.org/packages/alt_persian_datetime_picker)
-
-  
-
 A Flutter persian date picker inspired by material datetime picker and based on [shamsi_date](https://pub.dartlang.org/packages/shamsi_date).
 
   
