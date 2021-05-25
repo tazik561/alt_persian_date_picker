@@ -99,6 +99,5 @@ Here is an example how to use:
 
 
 ##Pull request and feedback are always appreciated.
-###Contact me with `ali.tazik@gmail.com`.
 
-#f create -t app ./example
+###Contact me with `ali.tazik@gmail.com`.
