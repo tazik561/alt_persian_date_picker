@@ -16,10 +16,10 @@ You can pick date / range date /  Month / Year .
 
 # Screenshots
 
-|||||||
-| ------- | ------- |------- | ------- | ------- | ------- |
+||
+--- | --- 
 
-|![]( images/DatePicker.png) |![]( images/date_picker_editable.png) |![]( images/date_picker_ranged.png) |![]( images/date_picker_seprate.png) |![]( images/month_picker.png) |![]( images/year_picker.png) |
+|![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/DatePicker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_editable.png) |
 
   
   
