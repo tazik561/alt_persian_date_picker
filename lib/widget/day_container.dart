@@ -28,7 +28,10 @@ class DayContainer extends StatelessWidget {
   final cellHeight = 35.0;
 
   Decoration makeDecoration() {
-    if (_isStartRange)
+    if (_isStartRange && _isEndRange == null) {
+      return BoxDecoration(
+          color: theme.selectedItemColor, shape: BoxShape.circle);
+    } else if (_isStartRange) {
       return BoxDecoration(
         color: theme.selectedItemColor,
         boxShadow: [
@@ -42,18 +45,13 @@ class DayContainer extends StatelessWidget {
           right: Radius.circular(50.0),
         ),
       );
+    }
     if (_isBetweenRange)
       return BoxDecoration(
-        color: theme.selectedItemColor,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              offset: Offset(0.0, 4.0),
-              spreadRadius: -2.0,
-              blurRadius: 1.0)
-        ],
+        color: theme.selectedItemColor.withOpacity(0.3),
+        shape: BoxShape.rectangle,
       );
-    if (_isEndRange)
+    if (_isEndRange != null && _isEndRange)
       return BoxDecoration(
         color: theme.selectedItemColor,
         boxShadow: [

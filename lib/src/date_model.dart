@@ -258,7 +258,9 @@ class DatePickerModel extends BasePickerModel {
     if (rangeSelectedDate != null && rangeSelectedDate.length == 2) {
       Jalali sj = _stringToJalali(rangeSelectedDate[0]);
       Jalali ej = _stringToJalali(rangeSelectedDate[1]);
-      return jDate.copy(day: day) > sj && jDate.copy(day: day) < ej;
+      var b = jDate.copy(day: day).compareTo(sj) > 0 &&
+          jDate.copy(day: day).compareTo(ej) < 0;
+      return b;
     }
     return false;
   }
@@ -267,6 +269,8 @@ class DatePickerModel extends BasePickerModel {
     if (rangeSelectedDate != null && rangeSelectedDate.length == 2) {
       Jalali ej = _stringToJalali(rangeSelectedDate[1]);
       return jDate.copy(day: day) == ej;
+    } else if (rangeSelectedDate != null && rangeSelectedDate.length == 1) {
+      return null;
     }
     return false;
   }
@@ -399,6 +403,14 @@ class DatePickerModel extends BasePickerModel {
       if (rangeSelectedDate.length == 2) rangeSelectedDate.clear();
       if (rangeSelectedDate.length >= 0)
         rangeSelectedDate.add(getStringJalaliSelectedUser(day));
+      rangeSelectedDate.sort((a, b) {
+        Jalali aa = _stringToJalali(a);
+        Jalali bb = _stringToJalali(b);
+        if (aa > bb)
+          return 1;
+        else
+          return -1;
+      });
     } else {
       // for simple date
       _selectedJDate = jDate.copy(day: day);
