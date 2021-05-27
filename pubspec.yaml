@@ -1,6 +1,6 @@
 name: alt_persian_date_picker
 description: Persian date picker for flutter.
-version: 0.1.2+9
+version: 0.1.3
 homepage: https://github.com/tazik561/alt_persian_date_picker
 
 environment:

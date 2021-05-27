@@ -7,6 +7,7 @@ import 'package:alt_persian_date_picker/widget/main_button_widget.dart';
 import 'package:alt_persian_date_picker/widget/mixed_header_widget.dart';
 import 'package:alt_persian_date_picker/widget/separate_header_widget.dart';
 import 'package:alt_persian_date_picker/widget/swap_page_builder.dart';
+import 'package:alt_persian_date_picker/widget/today_header_widget.dart';
 import 'package:flutter/material.dart';
 
 class AltDatePicker extends StatefulWidget {
@@ -137,7 +138,8 @@ class _AltDatePickerState extends State<AltDatePicker>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (widget.pickerModel.headerType == HeaderType.mix)
-              MixedHeaderWidget(
+              TodayHeaderWidget(
+                //MixedHeaderWidget
                 controller: controller,
                 theme: widget.theme,
                 pickerModel: widget.pickerModel,
@@ -170,9 +172,7 @@ class _AltDatePickerState extends State<AltDatePicker>
                 onSubmitted: other,
                 isSlideForward: isSlideAnimated,
               ),
-            SizedBox(
-              height: 8,
-            ),
+
             Divider(
               height: 2,
               thickness: 1,
@@ -186,7 +186,7 @@ class _AltDatePickerState extends State<AltDatePicker>
             dayOfWeekNameContainer(),
             daysTable(),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
               child: MainButtonWidget(
                 theme: widget.theme,
                 onConfirm: () {
@@ -238,15 +238,18 @@ class _AltDatePickerState extends State<AltDatePicker>
 // شنبه ، یکشنه ، دوشنبه
   Widget dayOfWeekNameContainer() {
     return Container(
+      height: 20,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: widget.pickerModel.weekDaysName
             .map((day) => Container(
                   width: cellWidth,
                   height: cellHeight,
-                  child: Text(day,
-                      textAlign: TextAlign.center,
-                      style: widget.theme.daysNameTextStyle),
+                  child: Center(
+                    child: Text(day,
+                        textAlign: TextAlign.center,
+                        style: widget.theme.daysNameTextStyle),
+                  ),
                 ))
             .toList(),
       ),
@@ -322,14 +325,10 @@ class _DaysTableState extends State<DaysTable> {
     List chunkAllDays = partition(allDaysWidget, 7).toList();
 
     chunkWeeksWidget = chunkAllDays.map((week) {
-      return Container(
-        height: cellHeight,
-        padding: EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: week,
-        ),
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: week,
       );
     }).toList();
   }

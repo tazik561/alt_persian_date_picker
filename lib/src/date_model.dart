@@ -279,6 +279,15 @@ class DatePickerModel extends BasePickerModel {
     return jDate.formatter.yyyy;
   }
 
+  String getTodayate() {
+    Date now = Jalali.now();
+    String day = now.formatter.dd;
+    String month = now.formatter.mN;
+    String year = now.formatter.yyyy;
+    String todayDate = "$day $month $year";
+    return todayDate;
+  }
+
   void makeDays() {
     _allDaysOfTable.clear();
     int monthLenght = jDate.monthLength;
