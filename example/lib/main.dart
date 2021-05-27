@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
                     selectedItemColor: Colors.yellow,
                     backgroundColor: Colors.blueGrey,
                     headerStyle: const TextStyle(
-                        color: Colors.teal,
+                        color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold),
                     daysNameTextStyle: const TextStyle(
