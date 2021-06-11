@@ -475,6 +475,16 @@ class TimeLinePickerModel extends BasePickerModel {
 
   Jalali jStartDate;
   Jalali jEndDate;
+  bool isOpen = false;
+
+  /// if user add initialSelectedDate , jCurrentDate is initialSelectedDate
+  /// otherwise jCurrentDate will be  jStartDate
+  ValueNotifier<Jalali> jCurrentDate;
+
+  /// offset jCurrentDate from start of list
+  double jCurrentDateOffset;
+  // offset of date from end to start
+  double jCurrentDateOffsetFromEnd;
 
   @override
   void getJalaliDateSelected() {
@@ -490,7 +500,18 @@ class TimeLinePickerModel extends BasePickerModel {
 
     jStartDate = jStartDate.withDay(1);
     jEndDate = jEndDate.withDay(1);
-    daysCount = jStartDate.julianDayNumber - jEndDate.julianDayNumber;
+    // daysCount = jStartDate.monthLength;
+
+    daysCount = (jStartDate.julianDayNumber - jEndDate.julianDayNumber).abs();
+
+    // todo check initialSelectedDate don't be bigger than from jStartDate
+    if (initialSelectedDate != null && initialSelectedDate.isNotEmpty)
+      jCurrentDate = ValueNotifier(stringToJalali(initialSelectedDate));
+    else
+      jCurrentDate = ValueNotifier(jStartDate);
+
+    _calculateScrollOffsetForward();
+    // _calculateScrollOffsetBackward();
   }
 
   @override
@@ -518,5 +539,112 @@ class TimeLinePickerModel extends BasePickerModel {
     String month = Jalali.fromDateTime(_date).formatter.mN;
     String stringDay = Jalali.fromDateTime(_date).formatter.dd;
     return "$year $month $stringDay";
+  }
+
+  // String getDate(int day) {
+  //   DateTime dateTime = jStartDate.toDateTime();
+  //   DateTime _date = dateTime.add(Duration(days: day));
+  //   String year = Jalali.fromDateTime(_date).formatter.yyyy;
+  //   String month = Jalali.fromDateTime(_date).formatter.mN;
+  //   String stringDay = Jalali.fromDateTime(_date).formatter.dd;
+  //   return "$year $month $stringDay";
+  // }
+
+  String getMonthName() {
+    return jCurrentDate.value.formatter.mN;
+  }
+
+  String getYear() {
+    return jCurrentDate.value.formatter.yyyy;
+  }
+
+  double calculateDateOffset(
+    double maxScrollExtent,
+    double scrollOffset,
+  ) {
+    int offset =
+        (jStartDate.julianDayNumber - jCurrentDate.value.julianDayNumber).abs();
+    print("---> ${(offset * width) + (offset * 4)}");
+    double offsetSelectedDate = (offset * width) + (offset * 4);
+    // calculateDateOffsetFromEnd(
+    //     maxScrollExtent, scrollOffset, offsetSelectedDate);
+    return offsetSelectedDate;
+  }
+
+  // void calculateDateOffsetFromEnd(
+  //     double maxScrollExtent, double scrollOffset, double offset) {
+  //   double restToStart = maxScrollExtent - offset;
+  //   jCurrentDateOffsetFromEnd = _calculateScrollOffsetBackward2() + restToStart;
+  //   print("---> jCurrentDateOffsetFromEnd $jCurrentDateOffsetFromEnd");
+  // }
+
+  void calculateScrollingDateOffset(
+      double scrollOffset, double maxScrollExtent, int direction) {
+    if (direction == 1) {
+      if (scrollOffset > jCurrentDateOffset) {
+        changeMonthNext();
+        _calculateScrollOffsetForward();
+      }
+    }
+    //  else if (direction == 2) {
+    //   var t = maxScrollExtent - scrollOffset;
+    //   // print("---> scrollOffset $scrollOffset");
+    //   // print("---> maxScrollExtent $maxScrollExtent");
+    //   // _calculateScrollOffsetBackward();
+    //   // print("---> t $t");
+    //   print("---> tt ${t + _calculateScrollOffsetBackward2()}");
+    //   if (t > jCurrentDateOffsetFromEnd) {
+    //     // _calculateScrollOffsetBackward();
+    //     print("---> Backward");
+    //     changeMonthPrev();
+    //   }
+    // }
+  }
+
+  void _calculateScrollOffsetForward() {
+    final int monthLenght = jCurrentDate.value.monthLength;
+    jCurrentDateOffset =
+        ((monthLenght * width) * jCurrentDate.value.month) + monthLenght * 4;
+  }
+
+  // void _calculateScrollOffsetBackward() {
+  //   final int monthLenght = jCurrentDate.value.monthLength;
+  //   jCurrentDateOffset =
+  //       ((monthLenght * width) * (jCurrentDate.value.month - 12)).abs() +
+  //           monthLenght * 4;
+
+  //   print("");
+  // }
+
+  // double _calculateScrollOffsetBackward2() {
+  //   Jalali j = jCurrentDate.value.addMonths(-1);
+  //   final int monthLenght = j.monthLength;
+  //   double result = (monthLenght * width) + monthLenght * 4;
+  //   return result;
+  // }
+
+  /// check selected date
+  bool selectedDate(int index) {
+    DateTime dateTime = jStartDate.toDateTime();
+    DateTime _date = dateTime.add(Duration(days: index));
+    return Jalali.fromDateTime(_date) == jCurrentDate.value;
+  }
+
+  void changeMonthNext() {
+    final int year = int.parse(jCurrentDate.value.formatter.y);
+    final int month = int.parse(jCurrentDate.value.formatter.m);
+    jCurrentDate.value = jCurrentDate.value.copy(
+      year: month == 12 ? year + 1 : year,
+      month: month < 12 ? month + 1 : 1,
+    );
+  }
+
+  void changeMonthPrev() {
+    final int year = int.parse(jCurrentDate.value.formatter.y);
+    final int month = int.parse(jCurrentDate.value.formatter.m);
+    jCurrentDate.value = jCurrentDate.value.copy(
+      month: month > 1 ? month - 1 : 12,
+      year: month == 1 ? year - 1 : year,
+    );
   }
 }

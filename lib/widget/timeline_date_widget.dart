@@ -22,7 +22,9 @@ class TimeLineDateWidget extends StatelessWidget {
         margin: EdgeInsets.all(3.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          color: Colors.red,
+          color: pickerModel.selectedDate(index)
+              ? theme.selectedItemColor
+              : theme.noneSelectedItemColor,
         ),
         child: Padding(
           padding: EdgeInsets.all(8),
@@ -30,8 +32,11 @@ class TimeLineDateWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(pickerModel.getDate(index).split(" ")[0]),
-              Text(pickerModel.getDate(index).split(" ")[1]),
+              // Text(pickerModel.getDate(index).split(" ")[0]),
+              Text(
+                pickerModel.getDate(index).split(" ")[1],
+                style: theme.daysNumberTextStyle,
+              ),
               Text(pickerModel.getDate(index).split(" ")[2]),
               // Text(
               //     new DateFormat("MMM", locale)

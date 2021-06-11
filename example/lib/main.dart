@@ -275,15 +275,21 @@ class _HomePageState extends State<HomePage> {
                   context,
                   PickerEnum.timeline,
                   theme: DatePickerTheme(
-                      noneSelectedItemColor: Colors.white,
-                      selectedItemColor: Colors.greenAccent,
-                      disableItemColor: Colors.redAccent),
+                      noneSelectedItemColor: Colors.grey[200],
+                      selectedItemColor: Colors.blueGrey,
+                      disableItemColor: Colors.redAccent,
+                      daysNumberTextStyle: const TextStyle(
+                          color: Colors.cyan,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500)),
                   pickerModel: TimeLinePickerModel(
+                      headerType: HeaderType.mix,
                       startDate: "1400/01/15",
-                      initialSelectedDate: "1400/03/21",
-                      endDate: "1398/01/15",
+                      initialSelectedDate: "1400/03/20",
+                      endDate: "1401/01/15",
                       disables: ["1400/01/04", "1400/01/15"],
-                      width: 80),
+                      width: 70,
+                      height: 80),
                   onConfirm: (time) {
                     print("Selected month is $time");
                     _showToast(time);
