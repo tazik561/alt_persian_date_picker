@@ -6,6 +6,7 @@ export 'package:alt_persian_date_picker/src/date_model.dart';
 
 import 'package:alt_persian_date_picker/pages/alt_date_picker.dart';
 import 'package:alt_persian_date_picker/pages/alt_month_picker.dart';
+import 'package:alt_persian_date_picker/pages/alt_timeline_picker.dart';
 import 'package:alt_persian_date_picker/pages/alt_year_picker.dart';
 import 'package:alt_persian_date_picker/src/date_model.dart';
 import 'package:alt_persian_date_picker/src/datetime_picker_theme.dart';
@@ -143,6 +144,13 @@ class __DatePickerComponentState extends State<_DatePickerComponent> {
         break;
       case PickerEnum.rangedate:
         return AltDatePicker(
+          pickerModel: widget.pickerModel,
+          theme: theme,
+          onConfirm: widget.onConfirm,
+        );
+        break;
+      case PickerEnum.timeline:
+        return AltTimeLinePicker(
           pickerModel: widget.pickerModel,
           theme: theme,
           onConfirm: widget.onConfirm,

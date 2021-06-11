@@ -269,6 +269,29 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text("بازه تاریخی"),
             ),
+            TextButton(
+              onPressed: () {
+                DatePicker.showDatePicker(
+                  context,
+                  PickerEnum.timeline,
+                  theme: DatePickerTheme(
+                      noneSelectedItemColor: Colors.white,
+                      selectedItemColor: Colors.greenAccent,
+                      disableItemColor: Colors.redAccent),
+                  pickerModel: TimeLinePickerModel(
+                      startDate: "1400/01/15",
+                      initialSelectedDate: "1400/03/21",
+                      endDate: "1398/01/15",
+                      disables: ["1400/01/04", "1400/01/15"],
+                      width: 80),
+                  onConfirm: (time) {
+                    print("Selected month is $time");
+                    _showToast(time);
+                  },
+                );
+              },
+              child: Text("دیت افقی"),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:alt_persian_date_picker/src/date_utils.dart';
 import 'package:alt_persian_date_picker/src/picker_enum.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shamsi_date/shamsi_date.dart';
@@ -224,14 +225,14 @@ class DatePickerModel extends BasePickerModel {
   @override
   String getNow() {
     Jalali date = Jalali.now();
-    return _getDateString(date);
+    return getDateString(date);
   }
 
   @override
   bool isDisable(int day) {
     bool isDisable = false;
     Jalali date = jDate.copy(day: day);
-    String dateString = _getDateString(date);
+    String dateString = getDateString(date);
     if (disables != null && disables.length > 0) {
       for (var item in disables) {
         isDisable =
@@ -245,10 +246,10 @@ class DatePickerModel extends BasePickerModel {
 
   bool isStartRanged(int day) {
     if (rangeSelectedDate != null && rangeSelectedDate.length == 2) {
-      Jalali sj = _stringToJalali(rangeSelectedDate[0]);
+      Jalali sj = stringToJalali(rangeSelectedDate[0]);
       return jDate.copy(day: day) == sj;
     } else if (rangeSelectedDate != null && rangeSelectedDate.length == 1) {
-      Jalali sj = _stringToJalali(rangeSelectedDate[0]);
+      Jalali sj = stringToJalali(rangeSelectedDate[0]);
       return jDate.copy(day: day) == sj;
     }
     return false;
@@ -256,8 +257,8 @@ class DatePickerModel extends BasePickerModel {
 
   bool isBetweenRanged(int day) {
     if (rangeSelectedDate != null && rangeSelectedDate.length == 2) {
-      Jalali sj = _stringToJalali(rangeSelectedDate[0]);
-      Jalali ej = _stringToJalali(rangeSelectedDate[1]);
+      Jalali sj = stringToJalali(rangeSelectedDate[0]);
+      Jalali ej = stringToJalali(rangeSelectedDate[1]);
       var b = jDate.copy(day: day).compareTo(sj) > 0 &&
           jDate.copy(day: day).compareTo(ej) < 0;
       return b;
@@ -267,7 +268,7 @@ class DatePickerModel extends BasePickerModel {
 
   bool isEndRanged(int day) {
     if (rangeSelectedDate != null && rangeSelectedDate.length == 2) {
-      Jalali ej = _stringToJalali(rangeSelectedDate[1]);
+      Jalali ej = stringToJalali(rangeSelectedDate[1]);
       return jDate.copy(day: day) == ej;
     } else if (rangeSelectedDate != null && rangeSelectedDate.length == 1) {
       return null;
@@ -334,11 +335,6 @@ class DatePickerModel extends BasePickerModel {
     }
   }
 
-  String _getDateString(Date date) {
-    final f = date.formatter;
-    return '${f.yyyy}/${f.mm}/${f.dd}';
-  }
-
   bool _isValidDate(String date) {
     // 1.YYYY/MM/DD
     // 2.YYYY/MM/D
@@ -357,15 +353,15 @@ class DatePickerModel extends BasePickerModel {
     bool isDisable = false;
     if (weekDaysName.indexOf(disable.toLowerCase()) != -1 && !isDisable) {
       isDisable =
-          _stringToJalali(date).weekDay == weekDaysName.indexOf(disable) + 1;
+          stringToJalali(date).weekDay == weekDaysName.indexOf(disable) + 1;
     }
     if (_isValidDate(date) && _isValidDate(disable) && !isDisable) {
-      isDisable = _stringToJalali(date) == _stringToJalali(disable);
+      isDisable = stringToJalali(date) == stringToJalali(disable);
     }
     return isDisable;
   }
 
-  Jalali _stringToJalali(String date) {
+  Jalali stringToJalali(String date) {
     List split = date.split('/');
     return Jalali(
             int.parse(split[0]), int.parse(split[1]), int.parse(split[2])) ??
@@ -374,15 +370,15 @@ class DatePickerModel extends BasePickerModel {
 
   String getStringJalaliSelectedUser(int day) {
     Jalali date = jDate.copy(day: day);
-    return _getDateString(date);
+    return getDateString(date);
   }
 
   String selectDate() {
     if (isRangeDate) {
       return rangeSelectedDate.length > 0 ? rangeSelectedDate.join("#") : "";
     }
-    if (_selectedJDate != null) return _getDateString(_selectedJDate);
-    return _getDateString(jDate);
+    if (_selectedJDate != null) return getDateString(_selectedJDate);
+    return getDateString(jDate);
   }
 
   @override
@@ -404,8 +400,8 @@ class DatePickerModel extends BasePickerModel {
       if (rangeSelectedDate.length >= 0)
         rangeSelectedDate.add(getStringJalaliSelectedUser(day));
       rangeSelectedDate.sort((a, b) {
-        Jalali aa = _stringToJalali(a);
-        Jalali bb = _stringToJalali(b);
+        Jalali aa = stringToJalali(a);
+        Jalali bb = stringToJalali(b);
         if (aa > bb)
           return 1;
         else
@@ -429,11 +425,98 @@ class DatePickerModel extends BasePickerModel {
           stringRegex.allMatches(date).map((m) => m.group(0)).toList();
       int seasonNumber = seasonName.indexOf(months.join("")) + 1;
       String year = years.join("").toEnglish;
-      jDate = _stringToJalali("$year/$seasonNumber/${jDate.formatter.d}");
+      jDate = stringToJalali("$year/$seasonNumber/${jDate.formatter.d}");
       return true;
     } on Exception catch (e) {
       print(e);
     }
     return false;
+  }
+}
+
+class TimeLinePickerModel extends BasePickerModel {
+  /// Start Date in case user wants to show past dates
+  /// If not provided calendar will start from now
+  final String startDate;
+
+  /// End Date in case user wants to show past dates
+  final String endDate;
+
+  /// Current Selected Date
+  final String initialSelectedDate;
+
+  /// Width of the selector
+  final double width;
+
+  /// Height of the selector
+  final double height;
+
+  /// Contains the list of inactive dates.
+  /// All the dates defined in this List will be deactivated
+  final List<String> disables;
+
+  /// definde type of header
+  final HeaderType headerType;
+
+  /// Max limit up to which the dates are shown.
+  /// Days are counted from the startDate to endDate
+  int daysCount;
+
+  TimeLinePickerModel(
+      {this.startDate,
+      this.endDate,
+      this.initialSelectedDate,
+      this.width = 60,
+      this.height = 80,
+      this.disables,
+      this.headerType = HeaderType.mix}) {
+    getJalaliDateSelected();
+  }
+
+  Jalali jStartDate;
+  Jalali jEndDate;
+
+  @override
+  void getJalaliDateSelected() {
+    //todo validate startDate and endDate
+    if (startDate == null || startDate.isEmpty)
+      jStartDate = Jalali.now();
+    else
+      jStartDate = stringToJalali(startDate);
+    if (endDate == null || endDate.isEmpty)
+      jEndDate = Jalali.now().addYears(-2);
+    else
+      jEndDate = stringToJalali(endDate);
+
+    jStartDate = jStartDate.withDay(1);
+    jEndDate = jEndDate.withDay(1);
+    daysCount = jStartDate.julianDayNumber - jEndDate.julianDayNumber;
+  }
+
+  @override
+  String getMonthNameByIndex(int monthIndex) {
+    return "";
+  }
+
+  @override
+  String getNow() {
+    return "";
+  }
+
+  @override
+  bool isDisable(int item) {
+    return false;
+  }
+
+  @override
+  void setArrowType(String type) {}
+
+  String getDate(int day) {
+    DateTime dateTime = jEndDate.toDateTime();
+    DateTime _date = dateTime.add(Duration(days: day));
+    String year = Jalali.fromDateTime(_date).formatter.yyyy;
+    String month = Jalali.fromDateTime(_date).formatter.mN;
+    String stringDay = Jalali.fromDateTime(_date).formatter.dd;
+    return "$year $month $stringDay";
   }
 }

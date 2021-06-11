@@ -4,7 +4,6 @@ import 'package:alt_persian_date_picker/src/partition.dart';
 import 'package:alt_persian_date_picker/widget/custom_date_header_widget.dart';
 import 'package:alt_persian_date_picker/widget/day_container.dart';
 import 'package:alt_persian_date_picker/widget/main_button_widget.dart';
-import 'package:alt_persian_date_picker/widget/mixed_header_widget.dart';
 import 'package:alt_persian_date_picker/widget/separate_header_widget.dart';
 import 'package:alt_persian_date_picker/widget/swap_page_builder.dart';
 import 'package:alt_persian_date_picker/widget/today_header_widget.dart';
