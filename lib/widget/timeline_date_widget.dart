@@ -32,24 +32,11 @@ class TimeLineDateWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              // Text(pickerModel.getDate(index).split(" ")[0]),
+              Text(pickerModel.getDate(index).split(",")[2]),
               Text(
-                pickerModel.getDate(index).split(" ")[1],
+                pickerModel.getDate(index).split(",")[1],
                 style: theme.daysNumberTextStyle,
               ),
-              Text(pickerModel.getDate(index).split(" ")[2]),
-              // Text(
-              //     new DateFormat("MMM", locale)
-              //         .format(date)
-              //         .toUpperCase(), // Month
-              //     style: monthTextStyle),
-              // Text(date.day.toString(), // Date
-              //     style: dateTextStyle),
-              // Text(
-              //     new DateFormat("E", locale)
-              //         .format(date)
-              //         .toUpperCase(), // WeekDay
-              //     style: dayTextStyle)
             ],
           ),
         ),

@@ -435,6 +435,8 @@ class DatePickerModel extends BasePickerModel {
 }
 
 class TimeLinePickerModel extends BasePickerModel {
+  final double widgetWidth;
+
   /// Start Date in case user wants to show past dates
   /// If not provided calendar will start from now
   final String startDate;
@@ -462,14 +464,16 @@ class TimeLinePickerModel extends BasePickerModel {
   /// Days are counted from the startDate to endDate
   int daysCount;
 
-  TimeLinePickerModel(
-      {this.startDate,
-      this.endDate,
-      this.initialSelectedDate,
-      this.width = 60,
-      this.height = 80,
-      this.disables,
-      this.headerType = HeaderType.mix}) {
+  TimeLinePickerModel({
+    this.startDate,
+    this.endDate,
+    this.initialSelectedDate,
+    this.width = 60,
+    this.height = 80,
+    this.disables,
+    this.headerType = HeaderType.mix,
+    this.widgetWidth,
+  }) {
     getJalaliDateSelected();
   }
 
@@ -479,7 +483,10 @@ class TimeLinePickerModel extends BasePickerModel {
 
   /// if user add initialSelectedDate , jCurrentDate is initialSelectedDate
   /// otherwise jCurrentDate will be  jStartDate
-  ValueNotifier<Jalali> jCurrentDate;
+  Jalali jCurrentDate;
+
+  /// Show date in screen
+  ValueNotifier<Jalali> jShownDate;
 
   /// offset jCurrentDate from start of list
   double jCurrentDateOffset;
@@ -502,16 +509,23 @@ class TimeLinePickerModel extends BasePickerModel {
     jEndDate = jEndDate.withDay(1);
     // daysCount = jStartDate.monthLength;
 
-    daysCount = (jStartDate.julianDayNumber - jEndDate.julianDayNumber).abs();
+    // daysCount = (jStartDate.julianDayNumber - jEndDate.julianDayNumber).abs();
 
     // todo check initialSelectedDate don't be bigger than from jStartDate
-    if (initialSelectedDate != null && initialSelectedDate.isNotEmpty)
-      jCurrentDate = ValueNotifier(stringToJalali(initialSelectedDate));
-    else
-      jCurrentDate = ValueNotifier(jStartDate);
+    if (initialSelectedDate != null && initialSelectedDate.isNotEmpty) {
+      // jCurrentDate = ValueNotifier(stringToJalali(initialSelectedDate));
+      jCurrentDate = stringToJalali(initialSelectedDate);
+      jShownDate =
+          ValueNotifier(stringToJalali(initialSelectedDate).withDay(1));
+    } else {
+      jCurrentDate = jStartDate;
+      jShownDate = ValueNotifier(jStartDate.addDays(1));
+    }
+    _getDaysCount();
+  }
 
-    _calculateScrollOffsetForward();
-    // _calculateScrollOffsetBackward();
+  _getDaysCount() {
+    daysCount = jShownDate.value.monthLength;
   }
 
   @override
@@ -533,12 +547,11 @@ class TimeLinePickerModel extends BasePickerModel {
   void setArrowType(String type) {}
 
   String getDate(int day) {
-    DateTime dateTime = jEndDate.toDateTime();
-    DateTime _date = dateTime.add(Duration(days: day));
-    String year = Jalali.fromDateTime(_date).formatter.yyyy;
-    String month = Jalali.fromDateTime(_date).formatter.mN;
-    String stringDay = Jalali.fromDateTime(_date).formatter.dd;
-    return "$year $month $stringDay";
+    Jalali date = jShownDate.value.withDay(day + 1);
+    String year = date.formatter.yyyy;
+    String month = date.formatter.wN;
+    String stringDay = date.formatter.d;
+    return "$year, $month, $stringDay";
   }
 
   // String getDate(int day) {
@@ -551,37 +564,32 @@ class TimeLinePickerModel extends BasePickerModel {
   // }
 
   String getMonthName() {
-    return jCurrentDate.value.formatter.mN;
+    return jShownDate.value.formatter.mN;
   }
 
   String getYear() {
-    return jCurrentDate.value.formatter.yyyy;
+    return jShownDate.value.formatter.yyyy;
   }
 
-  double calculateDateOffset(
-    double maxScrollExtent,
-    double scrollOffset,
-  ) {
-    int offset =
-        (jStartDate.julianDayNumber - jCurrentDate.value.julianDayNumber).abs();
-    print("---> ${(offset * width) + (offset * 4)}");
-    double offsetSelectedDate = (offset * width) + (offset * 4);
-    // calculateDateOffsetFromEnd(
-    //     maxScrollExtent, scrollOffset, offsetSelectedDate);
+  double calculateDateOffset(double shift, double itemWidth, double padding) {
+    // int offset =
+    //     (jStartDate.julianDayNumber - jCurrentDate.julianDayNumber).abs();
+    // print("---> ${(offset * width) + (offset * 4)}");
+    // double offsetSelectedDate = (offset * width) + (offset * 4);
+    // return offsetSelectedDate;
+
+    // get day of month
+    int offset = int.parse(jCurrentDate.formatter.dd);
+    if (offset == 1) return 1;
+    double offsetSelectedDate =
+        ((offset - shift) * itemWidth) - ((itemWidth * shift) + padding);
     return offsetSelectedDate;
   }
-
-  // void calculateDateOffsetFromEnd(
-  //     double maxScrollExtent, double scrollOffset, double offset) {
-  //   double restToStart = maxScrollExtent - offset;
-  //   jCurrentDateOffsetFromEnd = _calculateScrollOffsetBackward2() + restToStart;
-  //   print("---> jCurrentDateOffsetFromEnd $jCurrentDateOffsetFromEnd");
-  // }
 
   void calculateScrollingDateOffset(
       double scrollOffset, double maxScrollExtent, int direction) {
     if (direction == 1) {
-      if (scrollOffset > jCurrentDateOffset) {
+      if (scrollOffset + 100 > maxScrollExtent) {
         changeMonthNext();
         _calculateScrollOffsetForward();
       }
@@ -602,47 +610,41 @@ class TimeLinePickerModel extends BasePickerModel {
   }
 
   void _calculateScrollOffsetForward() {
-    final int monthLenght = jCurrentDate.value.monthLength;
+    Jalali j = jCurrentDate.addMonths(1);
+    final int monthLenght = j.monthLength;
+    int offset =
+        (jStartDate.julianDayNumber - jCurrentDate.julianDayNumber).abs();
+
+    // days from start till selected date multiple with of date container
+    // plus monthLenght /2  of next month multiple with of date container
     jCurrentDateOffset =
-        ((monthLenght * width) * jCurrentDate.value.month) + monthLenght * 4;
+        ((offset * width) + ((monthLenght / 2) * width) + (offset * 4));
+    // jCurrentDateOffset =
+    //     ((monthLenght * width) * jCurrentDate.value.month) + monthLenght * 4;
   }
 
-  // void _calculateScrollOffsetBackward() {
-  //   final int monthLenght = jCurrentDate.value.monthLength;
-  //   jCurrentDateOffset =
-  //       ((monthLenght * width) * (jCurrentDate.value.month - 12)).abs() +
-  //           monthLenght * 4;
-
-  //   print("");
-  // }
-
-  // double _calculateScrollOffsetBackward2() {
-  //   Jalali j = jCurrentDate.value.addMonths(-1);
-  //   final int monthLenght = j.monthLength;
-  //   double result = (monthLenght * width) + monthLenght * 4;
-  //   return result;
-  // }
-
-  /// check selected date
+  /// check selected date to add style
   bool selectedDate(int index) {
-    DateTime dateTime = jStartDate.toDateTime();
-    DateTime _date = dateTime.add(Duration(days: index));
-    return Jalali.fromDateTime(_date) == jCurrentDate.value;
+    // DateTime dateTime = jStartDate.toDateTime();
+    // DateTime _date = dateTime.add(Duration(days: index));
+    // return Jalali.fromDateTime(_date) == jCurrentDate;
+    return jShownDate.value.withDay(index + 1) == jCurrentDate;
   }
 
   void changeMonthNext() {
-    final int year = int.parse(jCurrentDate.value.formatter.y);
-    final int month = int.parse(jCurrentDate.value.formatter.m);
-    jCurrentDate.value = jCurrentDate.value.copy(
+    final int year = int.parse(jShownDate.value.formatter.y);
+    final int month = int.parse(jShownDate.value.formatter.m);
+    jShownDate.value = jShownDate.value.copy(
       year: month == 12 ? year + 1 : year,
       month: month < 12 ? month + 1 : 1,
     );
+    _getDaysCount();
   }
 
   void changeMonthPrev() {
-    final int year = int.parse(jCurrentDate.value.formatter.y);
-    final int month = int.parse(jCurrentDate.value.formatter.m);
-    jCurrentDate.value = jCurrentDate.value.copy(
+    final int year = int.parse(jCurrentDate.formatter.y);
+    final int month = int.parse(jCurrentDate.formatter.m);
+    jCurrentDate = jCurrentDate.copy(
       month: month > 1 ? month - 1 : 12,
       year: month == 1 ? year - 1 : year,
     );

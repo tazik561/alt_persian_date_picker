@@ -38,7 +38,27 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
   }
 
   void _init() {
+    int shift = 0;
+    double shiftPos;
+    double widgetWidth = widget.pickerModel.widgetWidth;
+    int maxRowChild = (widgetWidth / widget.pickerModel.width).floor();
+    double _padding = 0.0;
+
+    if (maxRowChild.isOdd) {
+      shift = ((maxRowChild - 1) / 2).floor();
+      shiftPos = shift.toDouble();
+    } else {
+      shift = (maxRowChild / 2).floor();
+      shiftPos = shift - 0.5;
+    }
+
+    //calc padding(L+R)
+    _padding =
+        (widgetWidth - (maxRowChild * widget.pickerModel.width)) / maxRowChild;
     controller.scrollController = _scrollController;
+    controller.shift = shiftPos;
+    controller.itemWidth = _padding + widget.pickerModel.width;
+    controller.padding = _padding;
 
     _scrollController.addListener(() {
       final int scrollDirection =
@@ -46,16 +66,12 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
                   ScrollDirection.reverse
               ? 1
               : 2;
-
       double maxScrollExtent = _scrollController.position.maxScrollExtent;
       double offset = _scrollController.offset;
+      print("offset ---->$offset");
+      print("maxScrollExtent ---->$maxScrollExtent");
       widget.pickerModel.calculateScrollingDateOffset(
           offset, maxScrollExtent, scrollDirection);
-
-      // print("---> scrollDirection $scrollDirection");
-      // print("---> maxScrollExtent $maxScrollExtent");
-
-      // print("---> extentAfter $extentAfter");
     });
   }
 
@@ -64,7 +80,7 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: ValueListenableBuilder(
-        valueListenable: widget.pickerModel.jCurrentDate,
+        valueListenable: widget.pickerModel.jShownDate,
         builder: (context, value, child) => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,9 +122,13 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
 class TimelineDatePickerController {
   ScrollController scrollController;
   final TimeLinePickerModel pickerModel;
-
   TimelineDatePickerController(this.pickerModel);
 
+  double shift = 0;
+
+  ///padding + width of Item
+  double itemWidth = 0;
+  double padding = 0;
   void scrollToSelectedItem([bool isEnableAnimation = true]) {
     _jumpToSelection();
   }
@@ -116,16 +136,16 @@ class TimelineDatePickerController {
   ///[index]  listview index
   ///[isEnableAnimation] default set as true, jump with animation
   void _jumpToSelection([bool isEnableAnimation = true]) {
-    double maxScrollExtent = scrollController.position.maxScrollExtent;
-double offset = scrollController.offset;
+    // double maxScrollExtent = scrollController.position.maxScrollExtent;
+    // double offset = scrollController.offset;
     if (isEnableAnimation) {
       scrollController.animateTo(
-          pickerModel.calculateDateOffset(maxScrollExtent,offset),
+          pickerModel.calculateDateOffset(shift, itemWidth, padding),
           duration: const Duration(milliseconds: 300),
           curve: Curves.linear);
     } else {
       scrollController
-          ?.jumpTo(pickerModel.calculateDateOffset(maxScrollExtent,offset));
+          ?.jumpTo(pickerModel.calculateDateOffset(shift, itemWidth, padding));
     }
   }
 }

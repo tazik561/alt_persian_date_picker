@@ -283,9 +283,10 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 12,
                           fontWeight: FontWeight.w500)),
                   pickerModel: TimeLinePickerModel(
+                      widgetWidth: MediaQuery.of(context).size.width,
                       headerType: HeaderType.mix,
                       startDate: "1400/01/15",
-                      initialSelectedDate: "1400/03/20",
+                      initialSelectedDate: "1400/06/15",
                       endDate: "1401/01/15",
                       disables: ["1400/01/04", "1400/01/15"],
                       width: 70,
