@@ -44,8 +44,8 @@ class TimeLineDateWidget extends StatelessWidget {
       onTap: () {
         // Check if onDateSelected is not null
         if (onConfirm != null) {
-          // Call the onDateSelected Function
-          onConfirm("this.date");
+          pickerModel.selectDate(index);
+          onConfirm(pickerModel.getSelectedDate());
         }
       },
     );

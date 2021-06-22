@@ -1,5 +1,6 @@
 import 'package:alt_persian_date_picker/alt_persian_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 void main() {
   runApp(MyApp());
@@ -285,10 +286,10 @@ class _HomePageState extends State<HomePage> {
                   pickerModel: TimeLinePickerModel(
                       widgetWidth: MediaQuery.of(context).size.width,
                       headerType: HeaderType.mix,
-                      startDate: "1400/01/15",
-                      initialSelectedDate: "1400/06/15",
-                      endDate: "1401/01/15",
-                      disables: ["1400/01/04", "1400/01/15"],
+                      startDate: Jalali(1400, 1),
+                      initialSelectedDate: Jalali(1400, 6, 15),
+                      endDate: Jalali(1401, 1),
+                      disables: [Jalali(1400, 1, 1), Jalali(1400, 1, 15)],
                       width: 70,
                       height: 80),
                   onConfirm: (time) {

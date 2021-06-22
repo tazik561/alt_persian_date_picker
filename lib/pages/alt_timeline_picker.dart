@@ -2,7 +2,6 @@ import 'package:alt_persian_date_picker/alt_persian_date_picker.dart';
 import 'package:alt_persian_date_picker/src/datetime_picker_theme.dart';
 import 'package:alt_persian_date_picker/widget/timeline_date_widget.dart';
 import 'package:alt_persian_date_picker/widget/timeline_mix_header_widget.dart';
-import 'package:alt_persian_date_picker/widget/today_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -37,6 +36,12 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void _init() {
     int shift = 0;
     double shiftPos;
@@ -59,20 +64,19 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
     controller.shift = shiftPos;
     controller.itemWidth = _padding + widget.pickerModel.width;
     controller.padding = _padding;
+  }
 
-    _scrollController.addListener(() {
-      final int scrollDirection =
-          _scrollController.position.userScrollDirection ==
-                  ScrollDirection.reverse
-              ? 1
-              : 2;
-      double maxScrollExtent = _scrollController.position.maxScrollExtent;
-      double offset = _scrollController.offset;
-      print("offset ---->$offset");
-      print("maxScrollExtent ---->$maxScrollExtent");
-      widget.pickerModel.calculateScrollingDateOffset(
-          offset, maxScrollExtent, scrollDirection);
-    });
+  dragend(e) {
+    double offset = _scrollController.offset;
+    double maxExtentLenght = _scrollController.position.maxScrollExtent;
+    if (offset < -50) {
+      print("prev");
+      widget.pickerModel.changeMonthPrev();
+    }
+    if (offset - maxExtentLenght > 50) {
+      print("next");
+      widget.pickerModel.changeMonthNext();
+    }
   }
 
   @override
@@ -90,22 +94,25 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
                 theme: widget.theme,
                 pickerModel: widget.pickerModel,
               ),
-            SizedBox(
-              height: widget.pickerModel.height,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                controller: _scrollController,
-                itemCount: widget.pickerModel.daysCount,
-                itemBuilder: (context, index) {
-                  // print(index);
-                  return TimeLineDateWidget(
-                    index: index,
-                    pickerModel: widget.pickerModel,
-                    theme: widget.theme,
-                    onConfirm: widget.onConfirm,
-                  );
-                },
+            Listener(
+              onPointerUp: dragend,
+              child: SizedBox(
+                height: widget.pickerModel.height,
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  controller: _scrollController,
+                  itemCount: widget.pickerModel.daysCount,
+                  itemBuilder: (context, index) {
+                    // print(index);
+                    return TimeLineDateWidget(
+                      index: index,
+                      pickerModel: widget.pickerModel,
+                      theme: widget.theme,
+                      onConfirm: widget.onConfirm,
+                    );
+                  },
+                ),
               ),
             ),
             SizedBox(
