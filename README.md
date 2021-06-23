@@ -17,7 +17,6 @@ You can pick date / range date /  Month / Year .
 
 Date Picker | Editable Date Picker | Ranged Date Picker | Seprate Header Date Picker | Month Picker | Year Picker |
 --- | --- | --- | --- | --- | --- | --- 
-|
 
 ![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/datePicker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_editable.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_pickerranged.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_seprate.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/month_picker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/year_picker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_timeline.png)
 
