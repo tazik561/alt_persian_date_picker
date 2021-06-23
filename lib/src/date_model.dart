@@ -453,13 +453,6 @@ class TimeLinePickerModel extends BasePickerModel {
   /// Height of the selector
   final double height;
 
-  /// Contains the list of inactive dates.
-  /// All the dates defined in this List will be deactivated
-  final List<Jalali> disables;
-
-  /// definde type of header
-  final HeaderType headerType;
-
   /// Max limit up to which the dates are shown.
   /// Days are counted from the startDate to endDate
   int daysCount;
@@ -470,8 +463,6 @@ class TimeLinePickerModel extends BasePickerModel {
     this.initialSelectedDate,
     this.width = 60,
     this.height = 80,
-    this.disables,
-    this.headerType = HeaderType.mix,
     this.widgetWidth,
   }) {
     assert(!endDate.isBefore(startDate),
@@ -500,13 +491,6 @@ class TimeLinePickerModel extends BasePickerModel {
       jCurrentDate = startDate;
       jShownDate = ValueNotifier(startDate.addDays(1));
     }
-    disables.forEach((date) {
-      print(date.isBefore(startDate));
-      assert(date.isAtSameOrAfterAs(startDate),
-          '$date must be same or after startDate $startDate.');
-      assert(date.isAtSameOrBeforAs(endDate),
-          '$date must be same or before endDate $endDate.');
-    });
     _getDaysCount();
   }
 

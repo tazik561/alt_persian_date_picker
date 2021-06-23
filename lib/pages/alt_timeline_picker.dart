@@ -89,11 +89,10 @@ class _AltTimeLinePickerState extends State<AltTimeLinePicker> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (widget.pickerModel.headerType == HeaderType.mix)
-              TimelineMixHeaderWidget(
-                theme: widget.theme,
-                pickerModel: widget.pickerModel,
-              ),
+            TimelineMixHeaderWidget(
+              theme: widget.theme,
+              pickerModel: widget.pickerModel,
+            ),
             Listener(
               onPointerUp: dragend,
               child: SizedBox(

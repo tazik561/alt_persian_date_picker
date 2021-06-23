@@ -1,7 +1,6 @@
-
   
 
-# A persian (farsi,shamsi) date picker for flutter, inspired by material datetime picker.
+# A persian (farsi, shamsi) date picker for flutter, inspired by material datetime picker.
 
   
 
@@ -17,8 +16,12 @@ You can pick date / range date /  Month / Year .
 # Screenshots
 
 Date Picker | Editable Date Picker | Ranged Date Picker | Seprate Header Date Picker | Month Picker | Year Picker |
---- | --- | --- | --- | --- | --- 
-|![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/datePicker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_editable.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_pickerranged.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_seprate.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/month_picker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/year_picker.png) |
+--- | --- | --- | --- | --- | --- | --- 
+|
+
+![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/datePicker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_editable.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_pickerranged.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_seprate.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/month_picker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/year_picker.png) |![](https://raw.githubusercontent.com/tazik561/alt_persian_date_picker/main/images/date_picker_timeline)
+
+ |
 
   
   
@@ -86,15 +89,12 @@ Here is an example how to use:
 
 | Parameter  | Type | Default | Description |
 |-------------------------|---------------------|-----------------------------------------|------------------------------------------------------------------------------                                                                            |
-| type| `PickerEnum`| Has 4 values(`month`,`year`,`date`,`rangedate`)|
-| headerType| `HeaderType`| Has 3 values(`seprated `,`mix`,`writable`)|
-| disable| `String` or `List<String>`|null| Disable dates |
-| theme| `DatePickerTheme`| | You can add your style to each part of date picker |
-| onConfirm| `Function(String)`| | This event return a String date |
-
-
+| type| `PickerEnum` | Has 4 values( `month` , `year` , `date` , `rangedate` )|
+| headerType| `HeaderType` | Has 3 values( `seprated ` , `mix` , `writable` )|
+| disable| `String` or `List<String>` |null| Disable dates |
+| theme| `DatePickerTheme` | | You can add your style to each part of date picker |
+| onConfirm| `Function(String)` | | This event return a String date |
 
 ##Pull request and feedback are always appreciated.
 
-###Contact me with `ali.tazik@gmail.com`.
-
+###Contact me with `ali.tazik@gmail.com` .
